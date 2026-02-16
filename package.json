@@ -1,0 +1,14 @@
+{
+  "name": "zag-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "bun run --filter '*' build",
+    "dev:example": "bun run --filter @ai26/zag-example dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+}

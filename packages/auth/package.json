@@ -1,0 +1,46 @@
+{
+  "name": "@ai26/zag-auth",
+  "version": "0.1.0",
+  "description": "ZeroAgentGate authentication verification library",
+  "type": "module",
+  "main": "./dist/core.js",
+  "types": "./dist/core.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js"
+    },
+    "./adapters/hono": {
+      "types": "./dist/adapters/hono.d.ts",
+      "import": "./dist/adapters/hono.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "hono": "^4.0.0",
+    "typescript": "^5.3.0"
+  },
+  "peerDependencies": {
+    "hono": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "hono": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "agent",
+    "authentication",
+    "ed25519",
+    "ai"
+  ],
+  "license": "MIT"
+}

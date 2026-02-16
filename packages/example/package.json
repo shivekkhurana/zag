@@ -1,0 +1,22 @@
+{
+  "name": "@ai26/zag-example",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Example Hono service using ZeroAgentGate authentication",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "bun run src/index.ts",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@ai26/zag-auth": "workspace:*",
+    "@hono/node-server": "^1.8.0",
+    "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  }
+}
