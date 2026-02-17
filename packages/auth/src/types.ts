@@ -15,7 +15,11 @@ export interface VerifyOptions {
   publicKey: string;
 }
 
+import type { Storage } from './storage/interface.js';
+
 export interface ZagAuthOptions {
-  keysDir: string;
+  storage: Storage;
+  /** Manifest object - used to compute and send X-ZAG-Revision header */
+  manifest: Record<string, unknown>;
   maxTimestampDrift?: number; // in seconds, default 30
 }

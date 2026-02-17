@@ -1,4 +1,17 @@
+import { createHash } from 'crypto';
 import type { Manifest } from '../types/manifest.js';
+
+/**
+ * Compute a checksum for the manifest content
+ * Excludes the revision field so it can be used to detect content changes
+ */
+export function computeManifestChecksum(manifest: Manifest): string {
+  const { revision: _, ...manifestWithoutRevision } = manifest;
+  return createHash('sha256')
+    .update(JSON.stringify(manifestWithoutRevision))
+    .digest('hex')
+    .slice(0, 12);
+}
 
 /**
  * Validate that URL has protocol
@@ -20,6 +33,7 @@ export function buildManifestUrl(serviceUrl: string): string {
 
 /**
  * Fetch manifest from a service
+ * Automatically computes and adds revision checksum
  */
 export async function fetchManifest(path: string): Promise<Manifest> {
   const url = buildManifestUrl(path);
@@ -31,6 +45,9 @@ export async function fetchManifest(path: string): Promise<Manifest> {
 
   const manifest = (await response.json()) as Manifest;
   validateManifest(manifest);
+
+  // Compute and set revision checksum
+  manifest.revision = computeManifestChecksum(manifest);
 
   return manifest;
 }

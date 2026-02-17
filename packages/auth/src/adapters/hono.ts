@@ -1,5 +1,6 @@
+import { createHash } from 'crypto';
 import type { Context, Next, MiddlewareHandler } from 'hono';
-import { buildSigningString, verify, loadAgent } from '../core.js';
+import { verify } from '../core.js';
 import type { ZagAuthOptions } from '../types.js';
 
 declare module 'hono' {
@@ -9,10 +10,23 @@ declare module 'hono' {
 }
 
 /**
+ * Compute manifest revision checksum
+ */
+function computeRevision(manifest: Record<string, unknown>): string {
+  return createHash('sha256')
+    .update(JSON.stringify(manifest))
+    .digest('hex')
+    .slice(0, 12);
+}
+
+/**
  * ZeroAgentGate authentication middleware for Hono
  */
 export function zagAuth(opts: ZagAuthOptions): MiddlewareHandler {
-  const { keysDir, maxTimestampDrift = 30 } = opts;
+  const { storage, manifest, maxTimestampDrift = 30 } = opts;
+
+  // Pre-compute revision at middleware creation time
+  const revision = computeRevision(manifest);
 
   return async (c: Context, next: Next) => {
     const agentId = c.req.header('X-Agent-Id');
@@ -39,8 +53,8 @@ export function zagAuth(opts: ZagAuthOptions): MiddlewareHandler {
       );
     }
 
-    // Load agent
-    const agent = await loadAgent(agentId, keysDir);
+    // Load agent from storage
+    const agent = await storage.getAgent(agentId);
     if (!agent) {
       return c.json({ error: 'Agent not found' }, 401);
     }
@@ -78,5 +92,8 @@ export function zagAuth(opts: ZagAuthOptions): MiddlewareHandler {
     c.set('agentId', agentId);
 
     await next();
+
+    // Add revision header to response
+    c.header('X-ZAG-Revision', revision);
   };
 }

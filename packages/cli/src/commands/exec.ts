@@ -110,6 +110,13 @@ export default class Exec extends Command {
       timestamp,
     });
 
+    // Check for manifest revision changes
+    const serverRevision = response.headers.get('X-ZAG-Revision');
+    if (serverRevision && manifest.revision && serverRevision !== manifest.revision) {
+      console.error(ui.warn(`Manifest has changed (server: ${serverRevision}, cached: ${manifest.revision})`));
+      console.error(`Run "zag update ${serviceUrl}" to update.`);
+    }
+
     // Output response body to stdout
     const responseText = await response.text();
     this.log(responseText);

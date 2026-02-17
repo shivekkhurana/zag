@@ -8,35 +8,63 @@
       "id": "list-todos",
       "method": "GET",
       "path": "/api/todos",
-      "description": "List all todos"
+      "description": "List all todos",
+      "output": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "title": { "type": "string" },
+            "completed": { "type": "boolean" },
+            "created_at": { "type": "string", "format": "date-time" }
+          },
+          "required": ["id", "title", "completed", "created_at"]
+        }
+      }
     },
     {
       "id": "create-todo",
       "method": "POST",
       "path": "/api/todos",
       "description": "Create a new todo",
-      "params": [
-        {
-          "name": "title",
-          "type": "string",
-          "required": true,
-          "description": "The title of the todo"
-        }
-      ]
+      "input": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "description": "The title of the todo" }
+        },
+        "required": ["title"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "completed": { "type": "boolean" },
+          "created_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "title", "completed", "created_at"]
+      }
     },
     {
       "id": "delete-todo",
       "method": "DELETE",
       "path": "/api/todos/:id",
       "description": "Delete a todo by ID",
-      "params": [
-        {
-          "name": "id",
-          "type": "string",
-          "required": true,
-          "description": "The ID of the todo to delete"
-        }
-      ]
+      "input": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "The ID of the todo to delete" }
+        },
+        "required": ["id"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" }
+        },
+        "required": ["success"]
+      }
     }
   ]
 }

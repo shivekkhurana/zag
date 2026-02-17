@@ -13,6 +13,14 @@
     "./adapters/hono": {
       "types": "./dist/adapters/hono.d.ts",
       "import": "./dist/adapters/hono.js"
+    },
+    "./storage": {
+      "types": "./dist/storage/index.d.ts",
+      "import": "./dist/storage/index.js"
+    },
+    "./storage/drizzle": {
+      "types": "./dist/storage/drizzle.d.ts",
+      "import": "./dist/storage/drizzle.js"
     }
   },
   "files": [
@@ -40,7 +48,8 @@
     "agent",
     "authentication",
     "ed25519",
-    "ai"
+    "ai",
+    "drizzle"
   ],
   "license": "MIT"
 }

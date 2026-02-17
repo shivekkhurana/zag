@@ -1,9 +1,9 @@
 import { verify as cryptoVerify, createPublicKey } from 'crypto';
-import { readFile, writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import type { AgentRegistration, VerifyOptions } from './types.js';
+import type { VerifyOptions } from './types.js';
 
 export type { AgentRegistration, VerifyOptions, ZagAuthOptions } from './types.js';
+export type { Storage } from './storage/index.js';
+export { FileSystemStorage, DrizzleStorage } from './storage/index.js';
 
 /**
  * Build the canonical signing string for request verification
@@ -54,30 +54,3 @@ export function verify(opts: VerifyOptions): boolean {
   }
 }
 
-/**
- * Load an agent registration from the filesystem
- */
-export async function loadAgent(
-  agentId: string,
-  keysDir: string
-): Promise<AgentRegistration | null> {
-  try {
-    const agentPath = join(keysDir, `${agentId}.json`);
-    const data = await readFile(agentPath, 'utf-8');
-    return JSON.parse(data) as AgentRegistration;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Save an agent registration to the filesystem
- */
-export async function saveAgent(
-  agent: AgentRegistration,
-  keysDir: string
-): Promise<void> {
-  await mkdir(keysDir, { recursive: true });
-  const agentPath = join(keysDir, `${agent.agent_id}.json`);
-  await writeFile(agentPath, JSON.stringify(agent, null, 2), 'utf-8');
-}

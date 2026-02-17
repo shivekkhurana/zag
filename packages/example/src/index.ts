@@ -1,14 +1,19 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
-import { readFile, mkdir } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { zagAuth } from '@ai26/zag-auth/adapters/hono';
-import { saveAgent, type AgentRegistration } from '@ai26/zag-auth';
+import { FileSystemStorage, type AgentRegistration } from '@ai26/zag-auth';
 import { randomUUID } from 'crypto';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const KEYS_DIR = join(__dirname, '..', 'data', 'agents');
+const storage = new FileSystemStorage({ directory: KEYS_DIR });
+
+// Load manifest
+const manifestPath = join(__dirname, '..', '.zeroagentgate', 'manifest.json');
+const manifest = JSON.parse(await readFile(manifestPath, 'utf-8'));
 
 // In-memory todo storage
 interface Todo {
@@ -31,10 +36,8 @@ const todos: Todo[] = [
 const app = new Hono();
 
 // Serve manifest at root
-app.get('/.zeroagentgate/manifest.json', async (c) => {
-  const manifestPath = join(__dirname, '..', '.zeroagentgate', 'manifest.json');
-  const manifest = await readFile(manifestPath, 'utf-8');
-  return c.json(JSON.parse(manifest));
+app.get('/.zeroagentgate/manifest.json', (c) => {
+  return c.json(manifest);
 });
 
 // API routes
@@ -54,16 +57,13 @@ api.post('/auth/register', async (c) => {
   const agent: AgentRegistration = {
     agent_id,
     public_key,
-    name,
+    ...(name && { name }),
     registered_at: new Date().toISOString(),
     status: 'active',
   };
 
-  // Ensure keys directory exists
-  await mkdir(KEYS_DIR, { recursive: true });
-
-  // Save agent
-  await saveAgent(agent, KEYS_DIR);
+  // Save agent to storage
+  await storage.saveAgent(agent);
 
   console.log(`Registered agent: ${agent_id}`);
 
@@ -75,7 +75,7 @@ api.post('/auth/register', async (c) => {
 });
 
 // Apply auth middleware to all other API routes
-api.use('/*', zagAuth({ keysDir: KEYS_DIR }));
+api.use('/*', zagAuth({ storage, manifest }));
 
 // Protected routes
 api.get('/todos', (c) => {
