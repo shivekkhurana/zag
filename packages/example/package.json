@@ -1,6 +1,6 @@
 {
   "name": "@ai26/zag-example",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Example Hono service using ZeroAgentGate authentication",
   "type": "module",

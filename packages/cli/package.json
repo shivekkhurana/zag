@@ -1,7 +1,17 @@
 {
   "name": "@ai26/zag",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ZeroAgentGate CLI - AI agent authentication tool",
+  "author": "Shivek Khurana",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivekkhurana/zag.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/shivekkhurana/zag#readme",
+  "bugs": {
+    "url": "https://github.com/shivekkhurana/zag/issues"
+  },
   "type": "module",
   "bin": {
     "zag": "./bin/run.js"
@@ -19,7 +29,8 @@
     "postbuild": "oclif manifest",
     "dev:cli": "./bin/dev.js",
     "test": "bun test",
-    "test:watch": "bun test --watch"
+    "test:watch": "bun test --watch",
+    "publish:npm": "npm publish --access public"
   },
   "dependencies": {
     "@oclif/core": "^4.0.0",

@@ -1,7 +1,17 @@
 {
   "name": "@ai26/zag-auth",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ZeroAgentGate authentication verification library",
+  "author": "Shivek Khurana",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivekkhurana/zag.git",
+    "directory": "packages/auth"
+  },
+  "homepage": "https://github.com/shivekkhurana/zag#readme",
+  "bugs": {
+    "url": "https://github.com/shivekkhurana/zag/issues"
+  },
   "type": "module",
   "main": "./dist/core.js",
   "types": "./dist/core.d.ts",
@@ -28,7 +38,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "publish:npm": "npm publish --access public"
   },
   "dependencies": {},
   "devDependencies": {

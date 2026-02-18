@@ -6,9 +6,13 @@
   ],
   "scripts": {
     "build": "bun run --filter '*' build",
-    "dev:example": "bun run --filter @ai26/zag-example dev"
+    "dev:example": "bun run --filter @ai26/zag-example dev",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "publish:npm": "bun run build && bun run --filter '*' publish:npm"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.8",
     "typescript": "^5.3.0"
   }
 }
