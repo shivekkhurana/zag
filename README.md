@@ -439,6 +439,18 @@ This creates a `SKILL.md` in the same directory as the manifest. The skill file 
 
 Host the `.zeroagentgate/` directory at your service URL. OpenClaw agents can then install your service by visiting `https://yourservice.com/.zeroagentgate/SKILL.md`.
 
+### Global Options
+
+All commands accept the following options:
+
+- `--config, -c <dir>` - Configuration directory (default: `~/.zeroagentgateway`)
+
+Example:
+```bash
+zag ls --config /custom/config/dir
+zag setup http://localhost:8000 -c ~/my-zag-config
+```
+
 ## Security Notes
 
 1. **Private keys never leave the client.** Only the public key is sent during registration.

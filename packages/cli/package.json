@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@ai26/zag-auth": "workspace:*",
+    "@oclif/test": "^4.1.16",
     "@types/bun": "^1.0.0",
     "@types/node": "^20.0.0",
     "oclif": "^4.0.0",

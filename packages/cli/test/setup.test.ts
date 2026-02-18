@@ -214,9 +214,9 @@ describe('Config Utilities', () => {
   });
 
   describe('getServiceDir', () => {
-    it('converts colons to underscores', () => {
+    it('URL-encodes the path for filesystem safety', () => {
       const dir = getServiceDir('localhost:8000');
-      expect(dir).toContain('localhost_8000');
+      expect(dir).toContain('localhost%3A8000');
     });
   });
 

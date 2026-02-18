@@ -1,7 +1,8 @@
 import { Command, Args, Flags } from '@oclif/core';
 import { fetchManifest } from '../lib/manifest.js';
-import { loadManifest, saveManifest, serviceExists, listServices } from '../lib/config.js';
+import { loadManifest, saveManifest, serviceExists, listServices, setConfigDir } from '../lib/config.js';
 import { ui } from '../lib/ui.js';
+import { globalFlags } from '../lib/flags.js';
 
 export default class Update extends Command {
   static override description = 'Update manifest from a service';
@@ -14,6 +15,7 @@ export default class Update extends Command {
   };
 
   static override flags = {
+    ...globalFlags,
     all: Flags.boolean({
       char: 'a',
       description: 'Update all registered services',
@@ -28,6 +30,7 @@ export default class Update extends Command {
 
   async run(): Promise<void> {
     const { args, flags } = await this.parse(Update);
+    setConfigDir(flags.config ?? null);
     const { url } = args;
     const { all } = flags;
 

@@ -1,8 +1,9 @@
 import { Command, Args, Flags } from '@oclif/core';
-import { loadManifest, loadAgent, loadPrivateKey, serviceExists } from '../lib/config.js';
+import { loadManifest, loadAgent, loadPrivateKey, serviceExists, setConfigDir } from '../lib/config.js';
 import { importPrivateKey } from '../lib/crypto.js';
 import { buildSigningString, signRequest, substitutePath, sendRequest } from '../lib/request.js';
 import { ui } from '../lib/ui.js';
+import { globalFlags } from '../lib/flags.js';
 
 export default class Exec extends Command {
   static override description = 'Execute an action on a service';
@@ -19,6 +20,7 @@ export default class Exec extends Command {
   };
 
   static override flags = {
+    ...globalFlags,
     data: Flags.string({
       char: 'd',
       description: 'JSON data to send with the request',
@@ -33,6 +35,7 @@ export default class Exec extends Command {
 
   async run(): Promise<void> {
     const { args, flags } = await this.parse(Exec);
+    setConfigDir(flags.config ?? null);
     const { url: serviceUrl, action: actionId } = args;
     const { data } = flags;
 

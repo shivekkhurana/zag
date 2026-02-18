@@ -1,5 +1,6 @@
 import { Command } from '@oclif/core';
-import { listServices, loadManifest, loadAgent } from '../lib/config.js';
+import { listServices, loadManifest, loadAgent, setConfigDir } from '../lib/config.js';
+import { globalFlags } from '../lib/flags.js';
 
 export default class Ls extends Command {
   static override description = 'List all registered services';
@@ -11,8 +12,13 @@ export default class Ls extends Command {
     '<%= config.bin %> list',
   ];
 
+  static override flags = {
+    ...globalFlags,
+  };
+
   async run(): Promise<void> {
-    await this.parse(Ls);
+    const { flags } = await this.parse(Ls);
+    setConfigDir(flags.config ?? null);
     const services = await listServices();
 
     if (services.length === 0) {

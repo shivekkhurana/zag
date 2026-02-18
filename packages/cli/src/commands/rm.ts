@@ -1,6 +1,7 @@
 import { Command, Args } from '@oclif/core';
-import { serviceExists, removeService } from '../lib/config.js';
+import { serviceExists, removeService, setConfigDir } from '../lib/config.js';
 import { ui } from '../lib/ui.js';
+import { globalFlags } from '../lib/flags.js';
 
 export default class Rm extends Command {
   static override description = 'Remove a registered service';
@@ -19,8 +20,13 @@ export default class Rm extends Command {
     '<%= config.bin %> remove http://localhost:8000',
   ];
 
+  static override flags = {
+    ...globalFlags,
+  };
+
   async run(): Promise<void> {
-    const { args } = await this.parse(Rm);
+    const { args, flags } = await this.parse(Rm);
+    setConfigDir(flags.config ?? null);
     const { url: serviceUrl } = args;
 
     if (!serviceExists(serviceUrl)) {

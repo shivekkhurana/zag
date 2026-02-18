@@ -3,9 +3,10 @@ import { randomUUID } from 'crypto';
 import { createInterface } from 'readline';
 import { fetchManifest } from '../lib/manifest.js';
 import { generateKeyPair, exportPublicKey } from '../lib/crypto.js';
-import { saveKeys, saveAgent, saveManifest, serviceExists } from '../lib/config.js';
+import { saveKeys, saveAgent, saveManifest, serviceExists, setConfigDir } from '../lib/config.js';
 import { buildRegistrationUrl } from '../lib/request.js';
 import { ui } from '../lib/ui.js';
+import { globalFlags } from '../lib/flags.js';
 import type { AgentData } from '../types/manifest.js';
 
 async function confirm(message: string): Promise<boolean> {
@@ -33,6 +34,7 @@ export default class Setup extends Command {
   };
 
   static override flags = {
+    ...globalFlags,
     yes: Flags.boolean({
       char: 'y',
       description: 'Skip confirmation prompt',
@@ -48,6 +50,7 @@ export default class Setup extends Command {
 
   async run(): Promise<void> {
     const { args, flags } = await this.parse(Setup);
+    setConfigDir(flags.config ?? null);
     const serviceUrl = args.url;
     const skipConfirm = flags.yes;
 

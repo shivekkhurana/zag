@@ -1,6 +1,7 @@
 import { Command, Args } from '@oclif/core';
-import { loadAgent, loadManifest, serviceExists } from '../lib/config.js';
+import { loadAgent, loadManifest, serviceExists, setConfigDir } from '../lib/config.js';
 import { ui } from '../lib/ui.js';
+import { globalFlags } from '../lib/flags.js';
 
 export default class Status extends Command {
   static override description = 'Show status for a registered service';
@@ -14,8 +15,13 @@ export default class Status extends Command {
 
   static override examples = ['<%= config.bin %> status http://localhost:8000'];
 
+  static override flags = {
+    ...globalFlags,
+  };
+
   async run(): Promise<void> {
-    const { args } = await this.parse(Status);
+    const { args, flags } = await this.parse(Status);
+    setConfigDir(flags.config ?? null);
     const { url: serviceUrl } = args;
 
     // Check service exists

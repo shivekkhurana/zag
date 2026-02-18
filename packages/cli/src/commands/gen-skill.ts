@@ -5,6 +5,7 @@ import { dirname, join, resolve, basename } from 'path';
 import type { Manifest } from '../types/manifest.js';
 import { ui } from '../lib/ui.js';
 import { generateSkillMd } from '../lib/skill.js';
+import { globalFlags } from '../lib/flags.js';
 
 async function confirm(message: string): Promise<boolean> {
   const rl = createInterface({
@@ -31,6 +32,7 @@ export default class GenSkill extends Command {
   };
 
   static override flags = {
+    ...globalFlags,
     url: Flags.string({
       char: 'u',
       description: 'Base URL of the service',
